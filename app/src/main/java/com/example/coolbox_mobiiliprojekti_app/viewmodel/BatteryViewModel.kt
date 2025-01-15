@@ -33,10 +33,14 @@ class BatteryViewModel : ViewModel() {
                 _isLoading.value = true
 //                delay(2000)
                 val response = batteryApiService.getMostRecentValuesFromBattery()
-                _batteryChartState.value = _batteryChartState.value.copy(
-                    soc = response.currentBatteryStats[0].value
-                )
-//                _batteryChartState.value = _batteryChartState.value.copy(loading = false)
+
+                if (response.currentBatteryStats.isNotEmpty()) {
+                    _batteryChartState.value = _batteryChartState.value.copy(
+                        soc = response.currentBatteryStats[0].value
+                    )
+                }
+
+                _batteryChartState.value = _batteryChartState.value.copy(loading = false)
             }
         } catch (e: Exception) {
             _batteryChartState.value = _batteryChartState.value.copy(error = e.toString())
